@@ -32,13 +32,14 @@ export default class TeacherWelcomeScreen extends Component {
             password: '',
             firstName: '',
             lastName: '',
-            contact: '',
+            // contact: '',
             country: '',
-            state: '',
+            State: '',
             district: '',
             city: '',
             confirmPassword: '',
             isModalVisible: 'false',
+            schoolName: "",
         }
     }
     static navigationOptions = { header: null };
@@ -48,12 +49,13 @@ export default class TeacherWelcomeScreen extends Component {
         } else {
             firebase.auth().createUserWithEmailAndPassword(emailId, password)
                 .then(() => {
-                    db.collection('users').add({
+                    // const address = ;
+                    db.collection('all_teachers').add({
                         first_name: this.state.firstName,
                         last_name: this.state.lastName,
-                        contact: this.state.contact,
                         email_id: this.state.emailId,
-                        address: this.state.address
+                        school_address: this.state.schoolName.toUpperCase() + "/" + this.state.country.toUpperCase() + "/" + this.state.State.toUpperCase() + "/" + this.state.district.toUpperCase() + "/" + this.state.city.toUpperCase(),
+                        school_name: this.state.schoolName,
                     })
                     return Alert.alert(
                         'User Added Successfully',
@@ -68,7 +70,7 @@ export default class TeacherWelcomeScreen extends Component {
                     var errorCode = error.code;
                     var errorMessage = error.message;
                     return Alert.alert(errorMessage)
-                    console.log
+                    // console.log
                 });
         }
     }
@@ -110,8 +112,6 @@ export default class TeacherWelcomeScreen extends Component {
                                     })
                                 }}
                             />
-
-
                             <TextInput
                                 style={styles.formTextInput}
                                 placeholder={"Last Name"}
@@ -124,22 +124,22 @@ export default class TeacherWelcomeScreen extends Component {
                             />
                             <TextInput
                                 style={styles.formTextInput}
-                                placeholder={"Contact"}
-                                maxLength={10}
-                                keyboardType={'numeric'} s
-                                onChangeText={(text) => {
-                                    this.setState({
-                                        contact: text
-                                    })
-                                }}
-                            />
-                            <TextInput
-                                style={styles.formTextInput}
                                 placeholder={"Email"}
                                 keyboardType={'email-address'}
                                 onChangeText={(text) => {
                                     this.setState({
                                         emailId: text
+                                    })
+                                }}
+                            />
+                            <TextInput
+                                style={styles.formTextInput}
+                                placeholder={"School Name"}
+                                // maxLength={10}
+                                // keyboardType={'numeric'} 
+                                onChangeText={(text) => {
+                                    this.setState({
+                                        schoolName: text
                                     })
                                 }}
                             /><TextInput
@@ -156,7 +156,7 @@ export default class TeacherWelcomeScreen extends Component {
                                 placeholder={"State"}
                                 onChangeText={(text) => {
                                     this.setState({
-                                        state: text
+                                        State: text
                                     })
                                 }}
                             /><TextInput
@@ -194,26 +194,6 @@ export default class TeacherWelcomeScreen extends Component {
                                     })
                                 }}
                             />
-                            {/* <DropdownInput
-                                options={options}
-                                defaultValue={this.props.initialValue}
-                                menuClassName='dropdown-input'
-                                onSelect={this.handleSelectName}
-                                placeholder='Search...'
-                            /> */}
-                            {/* <Select
-
-
-                            /> */}
-
-
-                            {/* <View> */}
-                            {/* <Dropdown
-                                options={this.state.options}
-                                onChange={this._onSelect}
-                                value={this.state.options[0]}
-                                placeholder="Select your school" /> */}
-                            {/* </View> */}
                             <View style={styles.modalBackButton}>
                                 <TouchableOpacity
                                     style={styles.registerButton}
@@ -226,10 +206,10 @@ export default class TeacherWelcomeScreen extends Component {
                             </View>
                             <View style={styles.modalBackButton}>
                                 <TouchableOpacity
-                                    style={styles.cancelButton}
+                                    style={styles.registerButton}
                                     onPress={() => this.setState({ "isModalVisible": false })}
                                 >
-                                    <Text style={{ color: '#ff5722' }}>Cancel</Text>
+                                    <Text style={styles.registerButtonText}>Cancel</Text>
                                 </TouchableOpacity>
                             </View>
                         </KeyboardAvoidingView>
@@ -300,7 +280,7 @@ export default class TeacherWelcomeScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F8BE85',
+        backgroundColor: '#ffff',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -319,7 +299,8 @@ const styles = StyleSheet.create({
         width: 300,
         height: 40,
         borderBottomWidth: 1.5,
-        borderColor: '#ff8a65',
+        borderColor: '#6060ff',
+        color: '#ffff',
         fontSize: 20,
         margin: 10,
         paddingLeft: 10
@@ -333,7 +314,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
         fontSize: 30,
-        color: '#ff5722',
+        color: '#6060ff',
         margin: 50
     },
     modalContainer: {
@@ -364,19 +345,23 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderWidth: 1,
         borderRadius: 10,
-        marginTop: 30
+        marginTop: 30,
+        backgroundColor: '#6060ff'
     },
     registerButtonText: {
-        color: '#ff5722',
+        color: '#ffffff',
         fontSize: 15,
         fontWeight: 'bold'
     },
     cancelButton: {
         width: 200,
-        height: 30,
-        justifyContent: 'center',
+        height: 40,
         alignItems: 'center',
-        margin: 5,
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderRadius: 10,
+        marginTop: 30,
+        backgroundColor: '#6060ff'
     },
 
     button: {
@@ -385,7 +370,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 25,
-        backgroundColor: "#ff9800",
+        backgroundColor: "#5555ff",
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

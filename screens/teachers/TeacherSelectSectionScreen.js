@@ -14,21 +14,24 @@ export default class TeacherSelectSectionScreen extends Component {
     constructor() {
         super();
         this.state = {
-            userType: ""
+            userType: "",
+            options: ['section A', 'section B', 'section C', 'section D', 'section E', 'section F',]
         }
     }
 
     render() {
         return (
-            <View style={styles.Container}>
-                <MyCommonHeader title={"Class"} navigation={this.props.navigation} />
+            <View style={styles.container}>
+                <MyCommonHeader title={this.props.navigation.getParam(title, "Class")} navigation={this.props.navigation} />
                 <View style={styles.buttonContainer}>
-                    <MyButton text="Section A" />
-                    <MyButton text="Section B" />
+                    <MyButton values={this.state.options} navigation={this.props.navigation} navigationScreen={'TeacherSelectSubjectScreen'} />
+
+                    {/* <MyButton text="Section A" /> */}
+                    {/* <MyButton text="Section B" />
                     <MyButton text="Section C" />
                     <MyButton text="Section D" />
                     <MyButton text="Section E" />
-                    <MyButton text="Section F" />
+                    <MyButton text="Section F" /> */}
 
                 </View></View>
         )
@@ -41,7 +44,7 @@ const styles = StyleSheet.create({
         flex: 1,
         // flexDirection: "row",
         // flexWrap: "wrap",
-        backgroundColor: '#F8BE85',
+        backgroundColor: '#ffff',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -50,7 +53,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         flexWrap: "wrap",
-        backgroundColor: '#F8BE85',
+        backgroundColor: '#ffff',
         // alignItems: 'center',
         // justifyContent: 'center'
     },

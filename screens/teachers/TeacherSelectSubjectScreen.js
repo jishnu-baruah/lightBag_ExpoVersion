@@ -5,46 +5,30 @@ import {
     StyleSheet,
     TouchableOpacity,
     Alert,
-    ViewBase,
-    ScrollView,
 } from 'react-native';
 import MyButton from '../../components/MyButton';
 import MyCommonHeader from '../../components/MyCommonHeader';
 
 
-export default class TeacherHomeScreen extends Component {
+export default class TeacherSelectSectionScreen extends Component {
     constructor() {
         super();
         this.state = {
             userType: "",
-            options: ['class 1', 'class 2', 'class 3', 'class 4', 'class 5', 'class 6', 'class 7', 'class 8', 'class 9', 'class 10', 'class 11', 'class 12'],
+            options: ['Mathematics', 'Science', 'English', 'Social Science', 'Language']
         }
     }
-
-
 
     render() {
         return (
             <View style={styles.container}>
-                <MyCommonHeader title={"School"} navigation={this.props.navigation} />
-                {/* <ScrollView> */}
+                <MyCommonHeader title={"Section"} navigation={this.props.navigation} />
                 <View style={styles.buttonContainer}>
-                    <MyButton values={this.state.options} navigation={this.props.navigation} navigationScreen={'TeacherSelectSectionScreen'} />
-                    {/* <MyButton text="Class 1" />
+                    <MyButton values={this.state.options} navigation={this.props.navigation} navigationScreen={'TeacherHomeScreen'} />
 
-                    <MyButton text="Class 2" navigation={this.props.navigation} />
-                    <MyButton text="Class 3" navigation={this.props.navigation} />
-                    <MyButton text="Class 4" navigation={this.props.navigation} />
-                    <MyButton text="Class 5" navigation={this.props.navigation} />
-                    <MyButton text="Class 6" navigation={this.props.navigation} />
-                    <MyButton text="Class 7" navigation={this.props.navigation} />
-                    <MyButton text="Class 8" navigation={this.props.navigation} />
-                    <MyButton text="Class 9" navigation={this.props.navigation} />
-                    <MyButton text="Class 10" navigation={this.props.navigation} /> */}
 
-                </View>
-                {/* </ScrollView> */}
-            </View>
+
+                </View></View>
         )
     }
 }
@@ -55,18 +39,16 @@ const styles = StyleSheet.create({
         flex: 1,
         // flexDirection: "row",
         // flexWrap: "wrap",
-        // backgroundColor: '#F8BE85',
+        backgroundColor: '#ffff',
         alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 200
-
+        justifyContent: 'center'
     },
     buttonContainer: {
         // display: "flex",
         flex: 1,
         flexDirection: "row",
         flexWrap: "wrap",
-        // backgroundColor: '#F8BE85',
+        backgroundColor: '#ffff',
         // alignItems: 'center',
         // justifyContent: 'center'
     },
@@ -144,33 +126,24 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 5,
     },
+
     button: {
-        width: 80,
-        height: 80,
-        alignItems: 'center',
+        width: 300,
+        height: 50,
         justifyContent: 'center',
-        borderWidth: 1,
-        borderRadius: 10,
-        margin: 20,
-        color: '#ff3d00'
+        alignItems: 'center',
+        borderRadius: 25,
+        backgroundColor: "#ff9800",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 8,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 10.32,
+        elevation: 16,
+        padding: 10
     },
-    // button: {
-    //     width: 300,
-    //     height: 50,
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    //     borderRadius: 25,
-    //     backgroundColor: "#ff9800",
-    //     shadowColor: "#000",
-    //     shadowOffset: {
-    //         width: 0,
-    //         height: 8,
-    //     },
-    //     shadowOpacity: 0.30,
-    //     shadowRadius: 10.32,
-    //     elevation: 16,
-    //     padding: 10
-    // },
     buttonText: {
         color: '#ffff',
         fontWeight: '200',

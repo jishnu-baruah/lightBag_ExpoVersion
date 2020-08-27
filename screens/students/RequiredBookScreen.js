@@ -13,7 +13,7 @@ import MyCommonHeader from '../../components/MyCommonHeader';
 import firebase from 'firebase';
 import db from '../../config'
 
-export default class AllBooks extends Component {
+export default class RequiredBookScreen extends Component {
     constructor() {
         super()
         this.state = {
@@ -51,6 +51,11 @@ export default class AllBooks extends Component {
         this.section = this.props.navigation.state.params.section
         this.subject = this.props.navigation.state.params.title        // Alert.alert("hi", this)
 
+        console.log("this.address =" + this.props.navigation.state.params.schoolAddress,
+            "this.class =" + this.props.navigation.state.params.class,
+            "this.section =" + this.props.navigation.state.params.section,
+            "this.subject =" + this.props.navigation.state.params.title        // Alert.alert("hi", this)
+        )
     }
     getBookList = () => {
         this.getDetails();
@@ -66,6 +71,7 @@ export default class AllBooks extends Component {
             .where("class", "==", Class)
             .where("section", "==", section)
             .where("subject", "==", subject)
+            .where("required", "==", true)
             .onSnapshot((snapshot) => {
                 var bookList = snapshot.docs.map(document => document.data());
                 this.setState({
@@ -91,7 +97,7 @@ export default class AllBooks extends Component {
             class: this.state.class,
             section: this.state.section,
             subject: this.state.subject,
-            required: true
+            required: false
         })
         return (Alert.alert(
             'Article Added Successfully',
@@ -115,21 +121,21 @@ export default class AllBooks extends Component {
     }
 
 
-    addToTable = (bookDetails) => {
-        console.log('Book Details', bookDetails.doc_id)
-        if (bookDetails.requred) {
-            db.collection("all_books").doc(bookDetails.doc_id).update({
-                "required": true
-            })
-        }
-        else {
-            Alert.alert(bookDetails.doc_id)
-            db.collection("all_books").doc(bookDetails.doc_id).update({
-                "request_status": false
-            })
+    // addToTable = (bookDetails) => {
+    //     console.log('Book Details', bookDetails.doc_id)
+    //     if (bookDetails.requred) {
+    //         db.collection("all_books").doc(bookDetails.doc_id).update({
+    //             "required": true
+    //         })
+    //     }
+    //     else {
+    //         Alert.alert(bookDetails.doc_id)
+    //         db.collection("all_books").doc(bookDetails.doc_id).update({
+    //             "request_status": false
+    //         })
 
-        }
-    }
+    //     }
+    // }
 
     componentDidMount() {
         this.getDetails();
@@ -215,21 +221,21 @@ export default class AllBooks extends Component {
                 title={"Name :" + item.name}
                 subtitle={"Weight :" + item.weight}
                 titleStyle={{ color: 'black', fontWeight: 'bold' }}
-                rightElement={
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => {
-                            this.addToTable(item)
-                            // Alert.alert(item.required === true ? "Removed" : "Add")
-                            // this.props.navigation.navigate("ReceiverDetails", { "details": item }) 
-                        }}
-                    >
-                        <Text style={{ color: '#ffff' }}>
-                            {item.required === true ? "Remove" : "Add"}
-                        </Text>
+                // rightElement={
+                //     <TouchableOpacity
+                //         style={styles.button}
+                //         onPress={() => {
+                //             this.addToTable(item)
+                //             // Alert.alert(item.required === true ? "Removed" : "Add")
+                //             // this.props.navigation.navigate("ReceiverDetails", { "details": item }) 
+                //         }}
+                //     >
+                //         <Text style={{ color: '#ffff' }}>
+                //             {item.required === true ? "Remove" : "Add"}
+                //         </Text>
 
-                    </TouchableOpacity>
-                }
+                //     </TouchableOpacity>
+                // }
                 bottomDivider
             />
         )
@@ -246,7 +252,7 @@ export default class AllBooks extends Component {
                     <MyCommonHeader
                         title={this.props.navigation.state.params.title}
                         navigation={this.props.navigation}
-                        navigationScreen={"TeacherHomeScreen"}
+                        navigationScreen={"StudentHomeScreen"}
                         screen={"TeacherSelectSectionScreen"}
                         settings={false}
                         preTitle={this.props.navigation.state.params.preTitle}
@@ -268,7 +274,7 @@ export default class AllBooks extends Component {
                                 )
                         }
                     </View>
-                    <View style={{ alignSelf: "center", justifyContent: "center", margin: 30 }}>
+                    {/* <View style={{ alignSelf: "center", justifyContent: "center", margin: 30 }}>
                         <TouchableOpacity style={styles.addButton}
                             onPress={() => {
                                 // Alert.alert(this.state.schoolAddress)
@@ -276,7 +282,7 @@ export default class AllBooks extends Component {
                             }}>
                             <Text style={styles.addButtonText}>Add Article</Text>
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
                 </ScrollView>
             </View>
             // </View >

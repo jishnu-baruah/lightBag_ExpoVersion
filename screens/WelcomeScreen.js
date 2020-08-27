@@ -22,10 +22,10 @@ export default class WelcomeScreen extends Component {
         return (
             <View style={styles.container}>
                 <View >
-                    <Text style={styles.title}>Light Bag</Text>
+                    <Text style={styles.title}>LIGHT BAG</Text>
                 </View>
                 <View>
-                    <Text>Login as:</Text>
+                    <Text >Login as:</Text>
                 </View>
                 <View>
                     <TouchableOpacity
@@ -58,7 +58,7 @@ export default class WelcomeScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F8BE85',
+        // backgroundColor: 'F8BE85',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -68,16 +68,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontSize: 65,
+        fontSize: 55,
         fontWeight: '300',
         paddingBottom: 30,
-        color: '#ff3d00'
+        color: '#5555ff'
     },
     loginBox: {
         width: 300,
         height: 40,
         borderBottomWidth: 1.5,
-        borderColor: '#ff8a65',
+        borderColor: '#5555ff',
         fontSize: 20,
         margin: 10,
         paddingLeft: 10
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
         fontSize: 30,
-        color: '#ff5722',
+        color: '#5555ff',
         margin: 50
     },
     modalContainer: {
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
         width: "75%",
         height: 35,
         alignSelf: 'center',
-        borderColor: '#ffab91',
+        borderColor: '#5555ff',
         borderRadius: 10,
         borderWidth: 1,
         marginTop: 20,
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 25,
-        backgroundColor: "#ff9800",
+        backgroundColor: "#5555ff",
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

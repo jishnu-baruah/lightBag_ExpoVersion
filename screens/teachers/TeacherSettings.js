@@ -10,11 +10,11 @@ import {
     Alert,
     ScrollView
 } from 'react-native';
-// import MyCommonHeader from '../../components/MyCommonHeader';
+import MyCommonHeader from '../../components/MyCommonHeader';
 import db from '../../config'
 import firebase from 'firebase'
 
-export default class Settings extends Component {
+export default class TeacherSettings extends Component {
 
     constructor() {
         super();
@@ -26,13 +26,17 @@ export default class Settings extends Component {
             contact: '',
             docId: '',
             password: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            country: '',
+            State: '',
+            district: '',
+            city: '',
         }
     }
 
     getUserDetails = () => {
         var email = firebase.auth().currentUser.email;
-        db.collection('users').where('email_id', '==', email).get()
+        db.collection('all_teachers').where('email_id', '==', email).get()
             .then(snapshot => {
                 snapshot.forEach(doc => {
                     var data = doc.data()
@@ -40,9 +44,28 @@ export default class Settings extends Component {
                         emailId: data.email_id,
                         firstName: data.first_name,
                         lastName: data.last_name,
-                        address: data.address,
-                        contact: data.contact,
+                        address: data.school_address,
                         docId: doc.id
+                    })
+                });
+            })
+
+
+        Alert.alert("email", this.state.emailId)
+        console.log("email", this.state.emailId)
+        // Alert.alert("address", this.state.address)
+        // Alert.alert("docId", this.state.docId)
+        // console.log("address", this.state.address)
+        // console.log("docId", this.state.docId)
+        db.collection('all_schools').where('address', '==', this.state.address).get()
+            .then(snapshot => {
+                snapshot.forEach(doc => {
+                    var data = doc.data()
+                    this.setState({
+                        country: data.school_country,
+                        state: data.school_state,
+                        city: data.school_city,
+                        district: data.school_district,
                     })
                 });
             })
@@ -71,91 +94,121 @@ export default class Settings extends Component {
 
 
             <View>
+                <ScrollView style={{ width: '100%' }}>
+                    <MyCommonHeader
+                        title="Settings"
+                        navigation={this.props.navigation}
+                        navigationScreen={this.props.navigation.state.params.screen}
+                        preTitle={this.props.navigation.state.params.preTitle}
+                        settings={false} />
 
-                {/* <MyCommonHeader title="Settings" navigation={this.props.navigation} /> */}
-                <KeyboardAvoidingView >
-                    <View style={styles.formContainer}>
+                    <KeyboardAvoidingView style={styles.KeyboardAvoidingView}>
 
                         <TextInput
                             style={styles.formTextInput}
-                            placeholder={"First Name"}
+                            placeholder={this.state.firstName}
+                            maxLength={8}
                             onChangeText={(text) => {
                                 this.setState({
                                     firstName: text
                                 })
                             }}
-                            value={this.state.firstName}
-
                         />
                         <TextInput
                             style={styles.formTextInput}
-                            placeholder={"Last Name"}
+                            placeholder={this.state.lastName}
+                            maxLength={8}
                             onChangeText={(text) => {
                                 this.setState({
                                     lastName: text
                                 })
                             }}
-                            value={this.state.lastName}
                         />
                         <TextInput
                             style={styles.formTextInput}
-                            placeholder={"Contact"}
-                            maxLength={10}
-                            keyboardType={'numeric'}
+                            placeholder={"Email"}
+                            keyboardType={this.state.emailId}
                             onChangeText={(text) => {
                                 this.setState({
-                                    contact: text
+                                    emailId: text
                                 })
                             }}
-                            value={this.state.contact}
                         />
                         <TextInput
                             style={styles.formTextInput}
-                            placeholder={"Address"}
-                            multiline={true}
+                            placeholder={this.state.schoolName}
+                            // maxLength={10}
+                            // keyboardType={'numeric'} 
                             onChangeText={(text) => {
                                 this.setState({
-                                    address: text
+                                    schoolName: text
                                 })
                             }}
-                            value={this.state.address}
-                        />
-                        <TextInput
+                        /><TextInput
+                            style={styles.formTextInput}
+                            placeholder={this.state.country}
+                            // secureTextEntry={true}
+                            onChangeText={(text) => {
+                                this.setState({
+                                    country: text
+                                })
+                            }}
+                        /><TextInput
+                            style={styles.formTextInput}
+                            placeholder={this.state.State}
+                            onChangeText={(text) => {
+                                this.setState({
+                                    State: text
+                                })
+                            }}
+                        /><TextInput
+                            style={styles.formTextInput}
+                            placeholder={this.state.district}
+                            onChangeText={(text) => {
+                                this.setState({
+                                    district: text
+                                })
+                            }}
+                        /><TextInput
+                            style={styles.formTextInput}
+                            placeholder={this.state.city}
+                            onChangeText={(text) => {
+                                this.setState({
+                                    city: text
+                                })
+                            }}
+                        /><TextInput
                             style={styles.formTextInput}
                             placeholder={"Password"}
-                            keyboardType={'password'}
+                            secureTextEntry={true}
                             onChangeText={(text) => {
                                 this.setState({
                                     password: text
                                 })
                             }}
-                            value={this.state.password}
-                        />
-                        <TextInput
+                        /><TextInput
                             style={styles.formTextInput}
-                            placeholder={"ConfirmPassword"}
-                            keyboardType={'password'}
+                            placeholder={"Confirm Password"}
+                            secureTextEntry={true}
                             onChangeText={(text) => {
                                 this.setState({
-                                    password: text
+                                    confirmPassword: text
                                 })
                             }}
-                            value={this.state.confirmPassword}
                         />
+                        <View style={styles.modalBackButton}>
+                            <TouchableOpacity
+                                style={styles.registerButton}
+                                onPress={() =>
+                                    this.userSignUp(this.state.emailId, this.state.password, this.state.confirmPassword)
+                                }
+                            >
+                                <Text style={styles.registerButtonText}>Register</Text>
+                            </TouchableOpacity>
+                        </View>
 
-
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => { this.updateUserDetails() }}
-
-                        >
-                            <Text style={styles.buttonText}>Save</Text>
-                        </TouchableOpacity>
-
-                    </View>
-
-                </KeyboardAvoidingView>
-            </View>
+                    </KeyboardAvoidingView>
+                </ScrollView></View>
 
 
         )
@@ -176,18 +229,11 @@ const styles = StyleSheet.create({
     formContainer: {
         flex: 1,
         width: '100%',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderColor: '#5555ff'
     },
-    formTextInput: {
-        width: "75%",
-        height: 35,
-        alignSelf: 'center',
-        borderColor: '#ffab91',
-        borderRadius: 10,
-        borderWidth: 1,
-        marginTop: 20,
-        padding: 10,
-    },
+
+
     button: {
         width: "75%",
         height: 50,
@@ -209,5 +255,34 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: "bold",
         color: "#fff"
+    }, KeyboardAvoidingView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 130
+    }, formTextInput: {
+        width: "75%",
+        height: 35,
+        alignSelf: 'center',
+        borderColor: '#5555ff',
+        borderRadius: 10,
+        borderWidth: 1,
+        marginTop: 20,
+        padding: 10
+    },
+    registerButton: {
+        width: 200,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderRadius: 10,
+        marginTop: 30,
+        backgroundColor: '#6060ff'
+    },
+    registerButtonText: {
+        color: '#ffffff',
+        fontSize: 15,
+        fontWeight: 'bold'
     }
 })

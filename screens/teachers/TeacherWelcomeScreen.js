@@ -18,11 +18,7 @@ import db from '../../config';
 import firebase from 'firebase';
 import MyNormalHeader from '../../components/MyNormalHeader'
 
-const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-]
+
 
 export default class TeacherWelcomeScreen extends Component {
     constructor() {
@@ -32,7 +28,6 @@ export default class TeacherWelcomeScreen extends Component {
             password: '',
             firstName: '',
             lastName: '',
-            // contact: '',
             country: '',
             State: '',
             district: '',
@@ -56,6 +51,16 @@ export default class TeacherWelcomeScreen extends Component {
                         email_id: this.state.emailId,
                         school_address: this.state.schoolName.toUpperCase() + "/" + this.state.country.toUpperCase() + "/" + this.state.State.toUpperCase() + "/" + this.state.district.toUpperCase() + "/" + this.state.city.toUpperCase(),
                         school_name: this.state.schoolName,
+                    })
+                    db.collection("all_schools").add({
+                        school_address: this.state.schoolName.toUpperCase() + "/" + this.state.country.toUpperCase() + "/" + this.state.State.toUpperCase() + "/" + this.state.district.toUpperCase() + "/" + this.state.city.toUpperCase(),
+                        school_country: this.state.country,
+                        school_state: this.state.State,
+                        school_district: this.state.district,
+                        school_city: this.state.city,
+                        school_name: this.state.schoolName,
+                        subjects: [],
+
                     })
                     return Alert.alert(
                         'User Added Successfully',
@@ -93,7 +98,7 @@ export default class TeacherWelcomeScreen extends Component {
         return (
             <Modal
                 animationType="fade"
-                transparent={true}
+                // transparent={true}
                 visible={this.state.isModalVisible}
             >
                 <View style={styles.modalContainer}>
@@ -186,7 +191,7 @@ export default class TeacherWelcomeScreen extends Component {
                                 }}
                             /><TextInput
                                 style={styles.formTextInput}
-                                placeholder={"Confrim Password"}
+                                placeholder={"Confirm Password"}
                                 secureTextEntry={true}
                                 onChangeText={(text) => {
                                     this.setState({

@@ -1,12 +1,16 @@
 import React from 'react';
 import { createAppContainer, createSwitchNavigator, } from 'react-navigation';
-// import TeacherDrawerNavigater from './components/TeacherDrawerNavigator'
-// import TeacherSelectSectionScreen from './screens/teachers/TeacherSelectSectionScreen'
-// import TeacherStackNavigator from './components/TeacherStackNavigator'
+import TeacherSelectSectionScreen from './screens/teachers/TeacherSelectSectionScreen';
+import TeacherSelectSubjectScreen from './screens/teachers/TeacherSelectSubjectScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import TeacherWelcomeScreen from './screens/teachers/TeacherWelcomeScreen';
 import TeacherHomeScreen from './screens/teachers/TeacherHomeScreen';
+import TeacherSettings from './screens/teachers/TeacherSettings'
+import AllBooks from './screens/teachers/AllBooks'
 import StudentWelcomeScreen from './screens/students/StudentWelcomeScreen';
+import StudentHomeScreen from './screens/students/StudentHomeScreen';
+import RequiredBookScreen from './screens/students/RequiredBookScreen'
+
 import Test from './screens/test'
 
 
@@ -23,11 +27,13 @@ const switchNavigator = createSwitchNavigator({
   WelcomeScreen: { screen: WelcomeScreen },
   TeacherWelcomeScreen: { screen: TeacherWelcomeScreen },
   TeacherHomeScreen: { screen: TeacherHomeScreen },
-  // TeacherSelectSectionScreen: { screen: TeacherSelectSectionScreen },
+  TeacherSelectSectionScreen: { screen: TeacherSelectSectionScreen },
+  TeacherSelectSubjectScreen: { screen: TeacherSelectSubjectScreen },
+  TeacherSettings: { screen: TeacherSettings },
+  AllBooks: { screen: AllBooks },
   StudentWelcomeScreen: { screen: StudentWelcomeScreen },
-  Test: { screen: Test }
-  // TeacherStackNavigator: { screen: TeacherStackNavigator },
-  // TeacherDrawerNavigater: { screens: TeacherDrawerNavigater },
+  StudentHomeScreen: { screen: StudentHomeScreen },
+  RequiredBookScreen: { screen: RequiredBookScreen },
 })
 
 const AppContainer = createAppContainer(switchNavigator);

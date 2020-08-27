@@ -5,30 +5,91 @@ import {
     StyleSheet,
     TouchableOpacity,
     Alert,
+    ScrollView
 } from 'react-native';
 import MyButton from '../../components/MyButton';
 import MyCommonHeader from '../../components/MyCommonHeader';
-
+import firebase from 'firebase';
+import db from '../../config'
 
 export default class TeacherSelectSectionScreen extends Component {
     constructor() {
         super();
         this.state = {
             userType: "",
-            options: ['Mathematics', 'Science', 'English', 'Social Science', 'Language']
+            options: [],
+            extraOptions: []
         }
+        this.requestRef = null
+    }
+    getSchoolSubjects = () => {
+        var options = [];
+        var address = this.props.navigation.state.params.schoolAddress;
+        db.collections("all_schools").where("address", "==", address).get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    var data = doc.data();
+                    options = data.subjects;
+                    this.setState({
+                        extraOptions: options
+                    })
+                });
+            }).catch(function (error) {
+                console.log("Error getting documents: ", error);
+            });
+    }
+    getDefaultSubjects = () => {
+        var options = [];
+        db.collection("all_schools").where("name", "==", "defaultSchool")
+            .get()
+            .then((querySnapshot) => {
+                console.log("called")
+
+                querySnapshot.forEach((doc) => {
+                    var data = doc.data();
+                    options = data.subjects;
+                    this.setState({
+                        options: options
+                    })
+                });
+            })
+            .catch(function (error) {
+                console.log("Error getting documents: ", error);
+            });
+    }
+    componentDidMount() {
+        this.getDefaultSubjects();
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <MyCommonHeader title={"Section"} navigation={this.props.navigation} />
-                <View style={styles.buttonContainer}>
-                    <MyButton values={this.state.options} navigation={this.props.navigation} navigationScreen={'TeacherHomeScreen'} />
+
+                <ScrollView style={{ width: '100%' }}>
+                    <MyCommonHeader
+                        title={this.props.navigation.state.params.title}
+                        preTitle={this.props.navigation.state.params.preTitle}
+                        settings={false}
+                        sectionTitle={this.props.navigation.state.params.sectionTitle}
+                        // prevTitle={this.props.navigation.state.params.preTitle}
+                        navigation={this.props.navigation}
+                        navigationScreen={"TeacherSelectSectionScreen"}
+                        screen={"TeacherSelectSubjectScreen"} />
+                    <View style={styles.buttonContainer}>
+                        <MyButton
+                            values={this.state.options}
+                            navigation={this.props.navigation}
+                            navigationScreen={'AllBooks'}
+                            title={this.props.navigation.state.params.title}
+                            schoolAddress={this.props.navigation.state.params.schoolAddress}
+                            preTitle={this.props.navigation.state.params.preTitle}
+                            class={this.props.navigation.state.params.class}
+                            section={this.props.navigation.state.params.title}
+                        />
 
 
 
-                </View></View>
+                    </View></ScrollView></View>
         )
     }
 }

@@ -10,9 +10,39 @@ export default class MyCommonHeader extends Component {
     this.state = {
       value: "",
       userId: firebase.auth().currentUser.email,
+      title: "",
     }
   }
+  getTitle = () => {
+    var title = '';
+    if (this.props.preTitle !== undefined) {
+      // this.setState({
+      title = this.props.preTitle;
+      // })
+    } else {
+      // this.setState({
+      title = this.props.sectionTitle;
+      // })
+    }
+    return (title)
+  }
 
+  showSettings = () => {
+    if (this.props.settings) {
+      return (<Icon name='gear' type='font-awesome' color='#696969'
+        onPress={() => {
+          this.props.navigation.navigate('TeacherSettings',
+            { screen: this.props.screen, preTitle: this.props.title })
+
+          // Alert.alert("settings")
+        }} />)
+    } else {
+      return (
+        <View>
+        </View>
+      )
+    }
+  }
   // getNumberOfUnreadNotifications() {
   //   db.collection('all_notifications').where('targeted_user_id', '==', this.state.userId).where('notification_status', '==', "unread")
   //     .onSnapshot((snapshot) => {
@@ -25,6 +55,7 @@ export default class MyCommonHeader extends Component {
 
   componentDidMount() {
     // this.getNumberOfUnreadNotifications()
+    // this.getTitle()
   }
 
 
@@ -44,11 +75,16 @@ export default class MyCommonHeader extends Component {
   render() {
     return (
       <Header
-        leftComponent={<Icon name='bars' type='font-awesome' color='#696969'
-        // onPress={() => { this.props.navigation.openDrawer() }}
-        />}
+        leftComponent={<Icon name='arrow-left' type='font-awesome' color='#696969'
+          onPress={() => {
+            console.log("preTitle", this.props.preTitle)
+            console.log("sectionTitle", this.props.sectionTitle)
+            this.props.navigation.navigate(this.props.navigationScreen, { title: this.getTitle() })
+          }} />}
+
         centerComponent={{ text: this.props.title, style: { color: '#90A5A9', fontSize: 20, fontWeight: "bold", } }}
-        rightComponent={<this.BellIconWithBadge {...this.props} />}
+        rightComponent={this.showSettings}
+
         backgroundColor="#eaf8fe"
       />
 

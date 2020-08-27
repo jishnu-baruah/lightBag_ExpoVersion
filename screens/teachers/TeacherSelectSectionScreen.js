@@ -5,9 +5,12 @@ import {
     StyleSheet,
     TouchableOpacity,
     Alert,
+    ScrollView
 } from 'react-native';
 import MyButton from '../../components/MyButton';
 import MyCommonHeader from '../../components/MyCommonHeader';
+import firebase from 'firebase';
+import db from '../../config'
 
 
 export default class TeacherSelectSectionScreen extends Component {
@@ -15,25 +18,59 @@ export default class TeacherSelectSectionScreen extends Component {
         super();
         this.state = {
             userType: "",
-            options: ['section A', 'section B', 'section C', 'section D', 'section E', 'section F',]
+            options: []
         }
+    }
+
+    getDefaultSections = () => {
+        var options = [];
+        db.collection("all_schools").where("name", "==", "defaultSchool")
+            .get()
+            .then((querySnapshot) => {
+                console.log("called")
+
+                querySnapshot.forEach((doc) => {
+                    var data = doc.data();
+                    options = data.sections;
+                    this.setState({
+                        options: options
+                    })
+                });
+            })
+            .catch(function (error) {
+                console.log("Error getting documents: ", error);
+            });
+    }
+    componentDidMount() {
+        this.getDefaultSections();
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <MyCommonHeader title={this.props.navigation.getParam(title, "Class")} navigation={this.props.navigation} />
-                <View style={styles.buttonContainer}>
-                    <MyButton values={this.state.options} navigation={this.props.navigation} navigationScreen={'TeacherSelectSubjectScreen'} />
-
-                    {/* <MyButton text="Section A" /> */}
-                    {/* <MyButton text="Section B" />
+                <ScrollView style={{ width: '100%' }}>
+                    <MyCommonHeader
+                        title={this.props.navigation.state.params.title}
+                        navigation={this.props.navigation}
+                        navigationScreen={"TeacherHomeScreen"}
+                        screen={"TeacherSelectSectionScreen"}
+                        settings={false}
+                        preTitle={this.props.navigation.state.params.preTitle} />
+                    <View style={styles.buttonContainer}>
+                        <MyButton values={this.state.options}
+                            navigation={this.props.navigation}
+                            navigationScreen={'TeacherSelectSubjectScreen'}
+                            schoolAddress={this.props.navigation.state.params.schoolAddress}
+                            title={this.props.navigation.state.params.title}
+                            class={this.props.navigation.state.params.title} />
+                        {/* <MyButton text="Section A" /> */}
+                        {/* <MyButton text="Section B" />
                     <MyButton text="Section C" />
                     <MyButton text="Section D" />
                     <MyButton text="Section E" />
                     <MyButton text="Section F" /> */}
 
-                </View></View>
+                    </View></ScrollView></View>
         )
     }
 }

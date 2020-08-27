@@ -14,7 +14,7 @@ import firebase from 'firebase';
 import db from '../../config'
 
 
-export default class TeacherHomeScreen extends Component {
+export default class StudentHomeScreen extends Component {
     constructor() {
         super();
         this.state = {
@@ -32,7 +32,7 @@ export default class TeacherHomeScreen extends Component {
         var schoolName = "";
         var emailId = this.state.userId;
         console.log(emailId);
-        db.collection("all_teachers").where("email_id", "==", emailId)
+        db.collection("all_students").where("email_id", "==", emailId)
             .get()
             .then((querySnapshot) => {
 
@@ -51,7 +51,7 @@ export default class TeacherHomeScreen extends Component {
                 console.log("Error getting documents: ", error);
             });
     }
-    getDefaultClasses = () => {
+    getDefaultSubjects = () => {
         var options = [];
         db.collection("all_schools").where("name", "==", "defaultSchool")
             .get()
@@ -60,7 +60,7 @@ export default class TeacherHomeScreen extends Component {
 
                 querySnapshot.forEach((doc) => {
                     var data = doc.data();
-                    options = data.classes;
+                    options = data.subjects;
                     this.setState({
                         options: options
                     })
@@ -72,7 +72,7 @@ export default class TeacherHomeScreen extends Component {
     }
     componentDidMount() {
         this.getSchoolDetails();
-        this.getDefaultClasses();
+        this.getDefaultSubjects();
 
     }
 
@@ -85,15 +85,17 @@ export default class TeacherHomeScreen extends Component {
                     <MyCommonHeader
                         title={this.state.schoolName}
                         navigation={this.props.navigation}
-                        navigationScreen={"TeacherWelcomeScreen"}
-                        screen={"TeacherHomeScreen"}
+                        navigationScreen={"StudentWelcomeScreen"}
+                        screen={"StudentHomeScreen"}
                         settings={true} />
 
                     <View style={styles.buttonContainer}>
                         <MyButton values={this.state.options}
                             navigation={this.props.navigation}
-                            navigationScreen={'TeacherSelectSectionScreen'}
+                            navigationScreen={'RequiredBookScreen'}
                             schoolAddress={this.state.schoolAddress}
+                            class={this.props.navigation.state.params.class}
+                            section={this.props.navigation.state.params.section}
                         />
                         {/* <MyButton text="Class 1" />
                     <MyButton text="Class 2" navigation={this.props.navigation} />

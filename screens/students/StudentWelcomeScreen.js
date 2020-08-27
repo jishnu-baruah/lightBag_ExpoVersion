@@ -21,20 +21,19 @@ export default class StudentWelcomeScreen extends Component {
     constructor() {
         super();
         this.state = {
+            class: "",
+            section: "",
             emailId: '',
             password: '',
             firstName: '',
             lastName: '',
-            contact: '',
             country: '',
-            state: '',
+            State: '',
             district: '',
             city: '',
             confirmPassword: '',
             isModalVisible: 'false',
-            class: '',
-            section: '',
-            options: ["school1", "school2", "school3"]
+            schoolName: "",
         }
     }
 
@@ -44,13 +43,15 @@ export default class StudentWelcomeScreen extends Component {
         } else {
             firebase.auth().createUserWithEmailAndPassword(emailId, password)
                 .then(() => {
-                    db.collection('users').add({
+                    // const address = ;
+                    db.collection('all_students').add({
                         first_name: this.state.firstName,
                         last_name: this.state.lastName,
-                        contact: this.state.contact,
                         email_id: this.state.emailId,
-                        address: this.state.address
+                        school_address: this.state.schoolName.toUpperCase() + "/" + this.state.country.toUpperCase() + "/" + this.state.State.toUpperCase() + "/" + this.state.district.toUpperCase() + "/" + this.state.city.toUpperCase(),
+                        school_name: this.state.schoolName,
                     })
+
                     return Alert.alert(
                         'User Added Successfully',
                         '',
@@ -64,7 +65,7 @@ export default class StudentWelcomeScreen extends Component {
                     var errorCode = error.code;
                     var errorMessage = error.message;
                     return Alert.alert(errorMessage)
-                    console.log(errorMessage);
+                    // console.log
                 });
         }
     }
@@ -72,7 +73,9 @@ export default class StudentWelcomeScreen extends Component {
     userLogin = (emailId, password) => {
         firebase.auth().signInWithEmailAndPassword(emailId, password)
             .then(() => {
-                this.props.navigation.navigate('DonateBooks')
+                // Alert.alert("pressed")
+                this.props.navigation.navigate('StudentHomeScreen', { class: this.state.class, section: this.state.section });
+
             })
             .catch((error) => {
                 var errorCode = error.code;
@@ -81,11 +84,12 @@ export default class StudentWelcomeScreen extends Component {
             })
     }
 
+
     showModal = () => {
         return (
             <Modal
                 animationType="fade"
-                transparent={true}
+                // transparent={true}
                 visible={this.state.isModalVisible}
             >
                 <View style={styles.modalContainer}>
@@ -104,8 +108,6 @@ export default class StudentWelcomeScreen extends Component {
                                     })
                                 }}
                             />
-
-
                             <TextInput
                                 style={styles.formTextInput}
                                 placeholder={"Last Name"}
@@ -118,17 +120,6 @@ export default class StudentWelcomeScreen extends Component {
                             />
                             <TextInput
                                 style={styles.formTextInput}
-                                placeholder={"Contact"}
-                                maxLength={10}
-                                keyboardType={'numeric'}
-                                onChangeText={(text) => {
-                                    this.setState({
-                                        contact: text
-                                    })
-                                }}
-                            />
-                            <TextInput
-                                style={styles.formTextInput}
                                 placeholder={"Email"}
                                 keyboardType={'email-address'}
                                 onChangeText={(text) => {
@@ -136,10 +127,21 @@ export default class StudentWelcomeScreen extends Component {
                                         emailId: text
                                     })
                                 }}
+                            />
+                            <TextInput
+                                style={styles.formTextInput}
+                                placeholder={"School Name"}
+                                // maxLength={10}
+                                // keyboardType={'numeric'} 
+                                onChangeText={(text) => {
+                                    this.setState({
+                                        schoolName: text
+                                    })
+                                }}
                             /><TextInput
                                 style={styles.formTextInput}
                                 placeholder={"Country"}
-                                secureTextEntry={true}
+                                // secureTextEntry={true}
                                 onChangeText={(text) => {
                                     this.setState({
                                         country: text
@@ -148,16 +150,14 @@ export default class StudentWelcomeScreen extends Component {
                             /><TextInput
                                 style={styles.formTextInput}
                                 placeholder={"State"}
-                                secureTextEntry={true}
                                 onChangeText={(text) => {
                                     this.setState({
-                                        state: text
+                                        State: text
                                     })
                                 }}
                             /><TextInput
                                 style={styles.formTextInput}
                                 placeholder={"District"}
-                                secureTextEntry={true}
                                 onChangeText={(text) => {
                                     this.setState({
                                         district: text
@@ -166,7 +166,6 @@ export default class StudentWelcomeScreen extends Component {
                             /><TextInput
                                 style={styles.formTextInput}
                                 placeholder={"City"}
-                                secureTextEntry={true}
                                 onChangeText={(text) => {
                                     this.setState({
                                         city: text
@@ -177,7 +176,7 @@ export default class StudentWelcomeScreen extends Component {
                                 <TouchableOpacity
                                     style={styles.registerButton}
                                     onPress={() =>
-                                        this.userSignUp(this.state.emailId, "default", "default")
+                                        this.userSignUp(this.state.emailId, "123456", "123456")
                                     }
                                 >
                                     <Text style={styles.registerButtonText}>Register</Text>
@@ -185,10 +184,10 @@ export default class StudentWelcomeScreen extends Component {
                             </View>
                             <View style={styles.modalBackButton}>
                                 <TouchableOpacity
-                                    style={styles.cancelButton}
+                                    style={styles.registerButton}
                                     onPress={() => this.setState({ "isModalVisible": false })}
                                 >
-                                    <Text style={{ color: '#ff5722' }}>Cancel</Text>
+                                    <Text style={styles.registerButtonText}>Cancel</Text>
                                 </TouchableOpacity>
                             </View>
                         </KeyboardAvoidingView>
@@ -200,7 +199,7 @@ export default class StudentWelcomeScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <MyNormalHeader title="Teacher's login" navigation={this.props.navigation} />
+                <MyNormalHeader title="Student's login" navigation={this.props.navigation} />
 
                 <View style={styles.container}>
 
@@ -209,7 +208,7 @@ export default class StudentWelcomeScreen extends Component {
                     }
                     <View >
                         {/* <SantaAnimation /> */}
-                        <Text style={styles.title}>Light Bag</Text>
+                        {/* <Text style={styles.title}>Light Bag</Text> */}
                     </View>
                     <View>
                         <TextInput
@@ -223,15 +222,16 @@ export default class StudentWelcomeScreen extends Component {
                             }}
                         />
 
-                        <View style={styles.classAndSecContainer}>
+                        <View style={{ justifyContent: "center", flexDirection: "row" }}>
                             <View >
                                 <TextInput
                                     style={styles.classBox}
                                     keyboardType={'numeric'}
+                                    maxLength={2}
                                     placeholder="class"
                                     onChangeText={(text) => {
                                         this.setState({
-                                            class: text
+                                            class: "Class " + text
                                         })
                                     }}
                                 />
@@ -240,9 +240,10 @@ export default class StudentWelcomeScreen extends Component {
                                 <TextInput
                                     style={styles.sectionBox}
                                     placeholder="section"
+                                    maxLength={1}
                                     onChangeText={(text) => {
                                         this.setState({
-                                            section: text
+                                            section: "Section " + text.toUpperCase()
                                         })
                                     }}
                                 />
@@ -252,7 +253,7 @@ export default class StudentWelcomeScreen extends Component {
                             style={[styles.button, { marginBottom: 20, marginTop: 20 }]}
                             onPress={() => {
 
-                                this.userLogin(this.state.emailId, this.state.password)
+                                this.userLogin("js@g.com", "123456")
                             }}
                         >
                             <Text style={styles.buttonText}>Login</Text>
@@ -271,16 +272,13 @@ export default class StudentWelcomeScreen extends Component {
     }
 }
 
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F8BE85',
+        backgroundColor: '#ffff',
         alignItems: 'center',
         justifyContent: 'center'
-    },
-    classAndSecContainer: {
-        display: "flex",
-        flexDirection: "row",
     },
     profileContainer: {
         flex: 1,
@@ -288,25 +286,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontSize: 65,
+        fontSize: 50,
         fontWeight: '300',
         paddingBottom: 30,
-        color: '#ff3d00'
-    },
-    loginBox: {
-        width: 300,
-        height: 40,
-        borderBottomWidth: 1.5,
-        borderColor: '#ff8a65',
-        fontSize: 20,
-        margin: 10,
-        paddingLeft: 10
-    },
-    classBox: {
+        color: '#5555ff'
+    }, classBox: {
         width: 180,
         height: 40,
         borderBottomWidth: 1.5,
-        borderColor: '#ff8a65',
+        borderColor: '#5555ff',
         fontSize: 20,
         margin: 10,
         paddingLeft: 10
@@ -315,7 +303,17 @@ const styles = StyleSheet.create({
         width: 80,
         height: 40,
         borderBottomWidth: 1.5,
-        borderColor: '#ff8a65',
+        borderColor: '#5555ff',
+        fontSize: 20,
+        margin: 10,
+        paddingLeft: 10
+    },
+    loginBox: {
+        width: 300,
+        height: 40,
+        borderBottomWidth: 1.5,
+        borderColor: '#6060ff',
+        color: '#ffff',
         fontSize: 20,
         margin: 10,
         paddingLeft: 10
@@ -329,7 +327,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
         fontSize: 30,
-        color: '#ff5722',
+        color: '#6060ff',
         margin: 50
     },
     modalContainer: {
@@ -360,19 +358,23 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderWidth: 1,
         borderRadius: 10,
-        marginTop: 30
+        marginTop: 30,
+        backgroundColor: '#6060ff'
     },
     registerButtonText: {
-        color: '#ff5722',
+        color: '#ffffff',
         fontSize: 15,
         fontWeight: 'bold'
     },
     cancelButton: {
         width: 200,
-        height: 30,
-        justifyContent: 'center',
+        height: 40,
         alignItems: 'center',
-        marginTop: 5,
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderRadius: 10,
+        marginTop: 30,
+        backgroundColor: '#6060ff'
     },
 
     button: {
@@ -381,7 +383,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 25,
-        backgroundColor: "#ff9800",
+        backgroundColor: "#5555ff",
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
